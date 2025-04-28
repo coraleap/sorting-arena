@@ -1,4 +1,4 @@
-#!/usr/bin/env pypy
+
 # Quick sort implementation I pulled from https://www.programiz.com/dsa/quick-sort
 
 # function to find the partition position

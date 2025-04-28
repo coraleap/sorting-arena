@@ -1,4 +1,3 @@
-#!/usr/bin/env pypy
 import ctypes
 
 def list_to_clist (pyvals) -> ctypes.c_int:
@@ -43,6 +42,19 @@ heap = cheap.array_sort
 heap.argtypes = [ctypes.c_void_p, ctypes.c_int]
 heap.restype = None
 
+cshell = ctypes.CDLL(fullpath("./compalgos/shellsort.so"))
+shell_ciura = cshell.shellSort_ciura
+heap.argtypes = [ctypes.c_void_p, ctypes.c_int]
+heap.restype = None
+
+shell_random = cshell.shellSort_random
+heap.argtypes = [ctypes.c_void_p, ctypes.c_int]
+heap.restype = None
+
+shell_knuth = cshell.shellSort_knuth
+heap.argtypes = [ctypes.c_void_p, ctypes.c_int]
+heap.restype = None
+
 ctimsort = ctypes.CDLL(fullpath("./compalgos/timsort.so"))
 timsorta = ctimsort.timsort
 timsort = lambda a, b: timsorta(a, b, 4, ctimsort.comp)
@@ -59,6 +71,7 @@ from quicksort import quickSort_no_inds as quicksort
 
 from patiencesort import patienceSort
 
+
 class Point(ctypes.Structure):
     _fields_ = [('x', ctypes.c_int),
                 ('y', ctypes.c_int)]
@@ -69,7 +82,7 @@ def default_sort(arr: np.ndarray):
     return arr.sort()
 
 def numpy_sort(arr: np.ndarray):
-    return arr.sort(kind = 'heapsort')
+    return arr.sort()
 
 def numpy_stablesort(arr: np.ndarray):
     return arr.sort(stable = True)
@@ -156,6 +169,9 @@ ALL_ALGOS: dict[str, tuple[any, str]] = {
     'Quick Sort (Python)': (quicksort, 'python'),
     'Tim Sort (C)': (timsort, 'c'),
     'Heap Sort (C)': (heap, 'c'),
+    'Shell Sort - Ciura Gaps (C)': (shell_ciura, 'c'),
+    'Shell Sort - Random Gaps (C)': (shell_random, 'c'),
+    'Shell Sort - Knuth Gaps (C)': (shell_knuth, 'c'),
     'Python Sort (Library)': (default_sort, 'python'),
     'Numpy Sort (Library)': (numpy_sort, 'numpy'),
     'Numpy Stable Sort (Library)': (numpy_stablesort, 'numpy')
@@ -171,16 +187,20 @@ def main() -> None:
     # print(time_func(writeConsInts, 2 * 10 ** 4, buf))
     # print(time_func(pyth_writeConsInts, 2 * 10 ** 4))
 
-    arrlen: int = 2 ** 16
+    arrlen: int = 2 ** 24
     num: int = 1
 
     algos_ignored = {
         key: value for (key, value) in ALL_ALGOS.items()
-        if key not in ['Quick Sort (Python)', 'Library Sort (Python)'] 
+        # if key not in ['Quick Sort (Python)', 'Library Sort (Python)'] 
         # and key not in ['Shell Sort (Python)', 'Heap Sort (Python)']
     }
 
-    test_algos(algos_ignored, arrlen, num, inptype = 'normal')
+    c_algos = {
+        key: value for (key, value) in ALL_ALGOS.items() if value[1] == 'c' and key not in ['Shell Sort - Ciura Gaps (C)']
+    }
+
+    test_algos(c_algos, arrlen, num, inptype = 'normal')
 
     # run_tests(heap, arrlen, name = 'Heap Sort')
     # run_tests(default_sort, arrlen, name = 'Python Sort', lang = 'python')

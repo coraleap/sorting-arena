@@ -1,4 +1,3 @@
-#!/usr/bin/env pypy
 """
 Basic shellsort implementation taken from Wikipedia: https://en.wikipedia.org/wiki/Shellsort
 
@@ -7,8 +6,6 @@ Used for benchmarking of Python programs
 
 def shellSort(a: list) -> None:
     n: int = len(a)
-
-
     gaps: list[int] = []  # Sedgewick
     nextgap = 1
 
@@ -33,7 +30,6 @@ def shellSort(a: list) -> None:
                 j -= gap
             # put temp (the original a[i]) in its correct location
             a[j] = temp
-
 
 def main():
     arr1 = [int(((42747 * i ** 3.5 + 1014 * i ** 1.5 + 12479) % 781) // 1) for i in range(200)]

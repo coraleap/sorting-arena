@@ -1,5 +1,9 @@
 #include <stdio.h>
 
+/*
+Heap Sort coded by myself for 6.1903
+*/
+
 void swap_two_inds(int* arr, int ind1, int ind2) {
     int buffer = arr[ind1];
     arr[ind1] = arr[ind2];

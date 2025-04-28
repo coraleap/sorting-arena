@@ -1,5 +1,3 @@
-#!/usr/bin/env pypy
-
 def binSearch(arr: list, low: int, high: int, x: any) -> int:
     if high - low <= 1:
         if low == high:

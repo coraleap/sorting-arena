@@ -1,5 +1,3 @@
-#!/usr/bin/env pypy
-
 """
 Basic heapsort implementation taken from W3schools: 
 https://www.geeksforgeeks.org/python-program-for-heap-sort/
