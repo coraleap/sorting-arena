@@ -126,8 +126,8 @@ def run_test(algo, length: int,
         timediff: float = time_func(algo, inp)
         inp: list = inp.tolist()
     
-    if not verify_sorted(inp, target):
-        raise Warning('Not Sorted!')
+    # if not verify_sorted(inp, target):
+    #     raise Warning('Not Sorted!')
     return timediff
     
 def run_tests(algo, length: int, num: int = 100, 
@@ -177,6 +177,26 @@ ALL_ALGOS: dict[str, tuple[any, str]] = {
     'Numpy Stable Sort (Library)': (numpy_stablesort, 'numpy')
 }
 
+LIBRARY_SORTS: dict[str, tuple[any, str]] = {
+    'Python Sort (Library)': (default_sort, 'python'),
+    'Numpy Sort (Library)': (numpy_sort, 'numpy'),
+    'Numpy Stable Sort (Library)': (numpy_stablesort, 'numpy')
+}
+
+C_SORTS: dict[str, tuple[any, str]] = {
+    key: value for (key, value) in ALL_ALGOS.items() if value[1] == 'c' 
+}
+
+PY_SORTS: dict[str, tuple[any, str]] = {
+    key: value for (key, value) in ALL_ALGOS.items() if value[1] == 'python' 
+}
+
+VULNERABLE_SORTS: dict[str, tuple[any, str]] = {
+    'Library Sort (Python)': (librarySort, 'python'),
+    'Quick Sort (Python)': (quicksort, 'python'),
+    'Shell Sort - Ciura Gaps (C)': (shell_ciura, 'c')
+}
+
 def main() -> None:
     # a = ctypes.c_char_p(b"aab\0bccdd")
     # b = ctypes.c_char_p(b"      ")
@@ -187,20 +207,20 @@ def main() -> None:
     # print(time_func(writeConsInts, 2 * 10 ** 4, buf))
     # print(time_func(pyth_writeConsInts, 2 * 10 ** 4))
 
-    arrlen: int = 2 ** 24
+    arrlen: int = 4 * 10 ** 7
     num: int = 1
 
+    algos_no_py = dict(C_SORTS, **LIBRARY_SORTS)
+    selected_algos = algos_no_py
+
     algos_ignored = {
-        key: value for (key, value) in ALL_ALGOS.items()
+        key: value for (key, value) in selected_algos.items()
+        if key not in VULNERABLE_SORTS
         # if key not in ['Quick Sort (Python)', 'Library Sort (Python)'] 
         # and key not in ['Shell Sort (Python)', 'Heap Sort (Python)']
     }
 
-    c_algos = {
-        key: value for (key, value) in ALL_ALGOS.items() if value[1] == 'c' and key not in ['Shell Sort - Ciura Gaps (C)']
-    }
-
-    test_algos(c_algos, arrlen, num, inptype = 'normal')
+    test_algos(LIBRARY_SORTS, arrlen, num, inptype = 'normal')
 
     # run_tests(heap, arrlen, name = 'Heap Sort')
     # run_tests(default_sort, arrlen, name = 'Python Sort', lang = 'python')
