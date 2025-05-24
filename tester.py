@@ -42,6 +42,19 @@ heap = cheap.array_sort
 heap.argtypes = [ctypes.c_void_p, ctypes.c_int]
 heap.restype = None
 
+cquick = ctypes.CDLL(fullpath("./compalgos/quicksort.so"))
+quick_LR = cquick.quickSort_LR
+quick_LR.argtypes = [ctypes.c_void_p, ctypes.c_int]
+quick_LR.restype = None
+
+quick_LL = cquick.quickSort_LR
+quick_LL.argtypes = [ctypes.c_void_p, ctypes.c_int]
+quick_LL.restype = None
+
+quick_LL_branchless = cquick.quickSort_LR
+quick_LL_branchless.argtypes = [ctypes.c_void_p, ctypes.c_int]
+quick_LL_branchless.restype = None
+
 cshell = ctypes.CDLL(fullpath("./compalgos/shellsort.so"))
 shell_ciura = cshell.shellSort_ciura
 heap.argtypes = [ctypes.c_void_p, ctypes.c_int]
@@ -126,8 +139,8 @@ def run_test(algo, length: int,
         timediff: float = time_func(algo, inp)
         inp: list = inp.tolist()
     
-    # if not verify_sorted(inp, target):
-    #     raise Warning('Not Sorted!')
+    if not verify_sorted(inp, target):
+        raise Warning('Not Sorted!')
     return timediff
     
 def run_tests(algo, length: int, num: int = 100, 
@@ -169,6 +182,9 @@ ALL_ALGOS: dict[str, tuple[any, str]] = {
     'Quick Sort (Python)': (quicksort, 'python'),
     'Tim Sort (C)': (timsort, 'c'),
     'Heap Sort (C)': (heap, 'c'),
+    'Quick Sort - Vanilla, LR Pointers (C)': (quick_LR, 'c'),
+    'Quick Sort - Vanilla, LL Pointers (C)': (quick_LL, 'c'),
+    'Quick Sort - Vanilla, LL Pointers, branchless (C)': (quick_LL_branchless, 'c'),
     'Shell Sort - Ciura Gaps (C)': (shell_ciura, 'c'),
     'Shell Sort - Random Gaps (C)': (shell_random, 'c'),
     'Shell Sort - Knuth Gaps (C)': (shell_knuth, 'c'),
@@ -207,8 +223,8 @@ def main() -> None:
     # print(time_func(writeConsInts, 2 * 10 ** 4, buf))
     # print(time_func(pyth_writeConsInts, 2 * 10 ** 4))
 
-    arrlen: int = 4 * 10 ** 7
-    num: int = 1
+    arrlen: int = 4 * 10 ** 2
+    num: int = 100
 
     algos_no_py = dict(C_SORTS, **LIBRARY_SORTS)
     selected_algos = algos_no_py
@@ -220,7 +236,7 @@ def main() -> None:
         # and key not in ['Shell Sort (Python)', 'Heap Sort (Python)']
     }
 
-    test_algos(LIBRARY_SORTS, arrlen, num, inptype = 'normal')
+    test_algos(algos_ignored, arrlen, num, inptype = 'normal')
 
     # run_tests(heap, arrlen, name = 'Heap Sort')
     # run_tests(default_sort, arrlen, name = 'Python Sort', lang = 'python')
