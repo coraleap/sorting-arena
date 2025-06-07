@@ -212,7 +212,7 @@ all_algos: dict[str, tuple[any, str]] = {
         'worst_case_tc': 'O(n log n)',
         'average_case_tc': 'O(n log n)',
         'space_complexity': 'O(n)',
-        'stable': True
+        'stable': False
     },
     'Shell Sort': {
         'algo': shellSort,
