@@ -1,6 +1,6 @@
 **Sorting Arena**
 
-**WARNING: THIS PROGRAM ONLY RUNS ON MACOS (due to using shared libraries)**
+**WARNING: THIS PROGRAM (currently) ONLY RUNS ON MACOS (due to using shared libraries)**
 
 The Sorting Arena tests many efficient sorting algorithms on integer data, allowing us to see how these algorithms - coded on C and python - compare on different input sizes. These algorithms include commonly taught algorithms like Quicksort and Heapsort; commonly used algorithms like Timsort and Introsort; and niche algorithms like Library Sort and Patience Sort.
 
